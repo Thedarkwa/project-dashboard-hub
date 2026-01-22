@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from './useAuth';
 
 export interface Appointment {
   id: string;
@@ -19,10 +18,8 @@ export interface Appointment {
 }
 
 export function useAppointments() {
-  const { user } = useAuth();
-
   return useQuery({
-    queryKey: ['appointments', user?.id],
+    queryKey: ['appointments'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('appointments')
@@ -38,19 +35,17 @@ export function useAppointments() {
       if (error) throw error;
       return data as Appointment[];
     },
-    enabled: !!user,
   });
 }
 
 export function useTodayAppointments() {
-  const { user } = useAuth();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   return useQuery({
-    queryKey: ['appointments', 'today', user?.id],
+    queryKey: ['appointments', 'today'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('appointments')
@@ -68,22 +63,17 @@ export function useTodayAppointments() {
       if (error) throw error;
       return data as Appointment[];
     },
-    enabled: !!user,
   });
 }
 
 export function useCreateAppointment() {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async (appointment: Omit<Appointment, 'id' | 'doctor_id' | 'created_at' | 'updated_at' | 'patients'>) => {
+    mutationFn: async (appointment: Omit<Appointment, 'id' | 'created_at' | 'updated_at' | 'patients'>) => {
       const { data, error } = await supabase
         .from('appointments')
-        .insert({
-          ...appointment,
-          doctor_id: user?.id,
-        })
+        .insert(appointment)
         .select()
         .single();
 

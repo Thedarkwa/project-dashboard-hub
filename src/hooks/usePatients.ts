@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from './useAuth';
 
 export interface Patient {
   id: string;
@@ -16,10 +15,8 @@ export interface Patient {
 }
 
 export function usePatients() {
-  const { user } = useAuth();
-
   return useQuery({
-    queryKey: ['patients', user?.id],
+    queryKey: ['patients'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('patients')
@@ -29,22 +26,17 @@ export function usePatients() {
       if (error) throw error;
       return data as Patient[];
     },
-    enabled: !!user,
   });
 }
 
 export function useCreatePatient() {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async (patient: Omit<Patient, 'id' | 'doctor_id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (patient: Omit<Patient, 'id' | 'doctor_id' | 'created_at' | 'updated_at'> & { doctor_id: string }) => {
       const { data, error } = await supabase
         .from('patients')
-        .insert({
-          ...patient,
-          doctor_id: user?.id,
-        })
+        .insert(patient)
         .select()
         .single();
 

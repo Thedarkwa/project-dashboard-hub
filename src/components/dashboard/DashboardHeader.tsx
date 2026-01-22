@@ -3,14 +3,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  doctorName?: string;
+}
+
+export function DashboardHeader({ doctorName = "Doctor" }: DashboardHeaderProps) {
   return (
     <header className="flex items-center justify-between px-8 py-4 bg-background">
       {/* Welcome Section */}
       <div>
         <p className="text-sm text-muted-foreground">Welcome back</p>
         <h1 className="text-2xl font-semibold text-foreground">
-          Dr. Andrew <span className="ml-1">👋</span>
+          {doctorName} <span className="ml-1">👋</span>
         </h1>
       </div>
 
@@ -42,7 +46,7 @@ export function DashboardHeader() {
         {/* Profile */}
         <Avatar className="w-10 h-10 border-2 border-accent">
           <AvatarImage src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face" />
-          <AvatarFallback>DA</AvatarFallback>
+          <AvatarFallback>{doctorName?.charAt(0) || 'D'}</AvatarFallback>
         </Avatar>
       </div>
     </header>

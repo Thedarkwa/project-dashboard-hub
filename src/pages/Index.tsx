@@ -1,9 +1,5 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 import { usePatients } from '@/hooks/usePatients';
 import { useAppointments } from '@/hooks/useAppointments';
-import { useProfile } from '@/hooks/useProfile';
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatsCard } from "@/components/dashboard/StatsCard";
@@ -12,32 +8,11 @@ import { AppointmentLineChart } from "@/components/dashboard/AppointmentLineChar
 import { PatientOverview } from "@/components/dashboard/PatientOverview";
 import { PatientsTable } from "@/components/dashboard/PatientsTable";
 import { UpcomingAppointments } from "@/components/dashboard/UpcomingAppointments";
-import { Users, UserPlus, UserCheck, Calendar, Loader2 } from "lucide-react";
+import { Users, UserPlus, UserCheck, Calendar } from "lucide-react";
 
 const Index = () => {
-  const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const { data: patients, isLoading: patientsLoading } = usePatients();
   const { data: appointments, isLoading: appointmentsLoading } = useAppointments();
-  const { data: profile } = useProfile();
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth');
-    }
-  }, [user, authLoading, navigate]);
-
-  if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
 
   const totalPatients = patients?.length || 0;
   const totalAppointments = appointments?.length || 0;
@@ -53,7 +28,7 @@ const Index = () => {
       <DashboardSidebar />
       
       <div className="flex-1 flex flex-col overflow-hidden">
-        <DashboardHeader doctorName={profile?.full_name || 'Doctor'} />
+        <DashboardHeader doctorName="Doctor" />
         
         <main className="flex-1 overflow-y-auto px-8 pb-8">
           <div className="grid grid-cols-12 gap-6">

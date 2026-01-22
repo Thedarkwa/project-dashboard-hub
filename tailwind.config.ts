@@ -57,6 +57,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        chart: {
+          teal: "hsl(var(--chart-teal))",
+          "teal-light": "hsl(var(--chart-teal-light))",
+          green: "hsl(var(--chart-green))",
+          blue: "hsl(var(--chart-blue))",
+          orange: "hsl(var(--chart-orange))",
+          purple: "hsl(var(--chart-purple))",
+        },
+        status: {
+          online: "hsl(var(--status-online))",
+          offline: "hsl(var(--status-offline))",
+        },
+        stat: {
+          increase: "hsl(var(--stat-increase))",
+          decrease: "hsl(var(--stat-decrease))",
+        },
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

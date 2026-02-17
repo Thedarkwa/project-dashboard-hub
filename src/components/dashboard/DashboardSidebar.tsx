@@ -14,7 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
+
 
 const navItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -30,11 +30,8 @@ export function DashboardSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { signOut } = useAuth();
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/auth');
+  const handleLogout = () => {
+    navigate('/');
   };
 
   return (
